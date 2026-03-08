@@ -4,24 +4,29 @@ services:
 
   mongo:
     image: mongo:7
+    container_name: mongo
     restart: unless-stopped
     volumes:
       - mongo_data:/data/db
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
+    networks:
+      - app-net
 
   api:
     build: ./api
+    container_name: rest_api
     restart: unless-stopped
     ports:
       - "3000:3000"
     depends_on:
-      mongo:
-        condition: service_healthy
+      - mongo
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-net
 
 volumes:
   mongo_data:
+
+networks:
+  app-net:
+    driver: bridge
