@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+
+  hello-world:
+    build: .
+    container_name: hello_world
+    restart: unless-stopped
+    ports:
+      - "4000:3000"
