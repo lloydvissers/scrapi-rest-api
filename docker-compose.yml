@@ -4,27 +4,17 @@ services:
 
   mongo:
     image: mongo:7
-    container_name: mongo
     restart: unless-stopped
     volumes:
       - mongo_data:/data/db
-    networks:
-      - app-net
 
   api:
     build: ./api
-    container_name: rest_api
     restart: unless-stopped
     ports:
       - "3000:3000"
     depends_on:
       - mongo
-    networks:
-      - app-net
 
 volumes:
   mongo_data:
-
-networks:
-  app-net:
-    driver: bridge
